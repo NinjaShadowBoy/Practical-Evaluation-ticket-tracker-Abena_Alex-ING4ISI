@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "pocket-tracer",
-    "slug": "pocket-tracer",
+    "name": "ticket-tracker",
+    "slug": "ticket-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "pockettracer",
+    "scheme": "tickettracker",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -33,7 +33,9 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

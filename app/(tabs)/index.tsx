@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 
-import {
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AddTicketModal } from "@/components/ui/AddTicketModal";
 import { Ticket } from "@/components/ui/Ticket";
@@ -109,7 +104,7 @@ export default function Page() {
 const styles = StyleSheet.create({
   page: {
     paddingTop: 40,
-    paddingInline: 8,
+    paddingInline: 18,
     width: "auto",
     height: "100%",
     backgroundColor: "#fff",

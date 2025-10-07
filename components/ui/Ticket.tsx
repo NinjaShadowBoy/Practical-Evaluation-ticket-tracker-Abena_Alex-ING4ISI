@@ -123,7 +123,7 @@ export function Ticket({
             )}
           </View>
           <Pressable style={styles.cancelCircle} onPress={onDelete}>
-            <MaterialIcons name="cancel" size={28} color={danger} />
+            <MaterialIcons name="trash" size={28} color={danger} />
           </Pressable>
         </View>
         {expanded && (
