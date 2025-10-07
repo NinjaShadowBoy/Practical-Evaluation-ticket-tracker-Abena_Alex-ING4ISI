@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -29,48 +35,50 @@ export default function Page() {
   return (
     <>
       <SafeAreaView style={styles.page}>
-        <Text style={styles.mainTitle}>Ticket List</Text>
-        <Text style={styles.subTitle}>
-          You have {tickets.length} Issues remaining
-        </Text>
+        <View style={styles.page}>
+          <Text style={styles.mainTitle}>Ticket List</Text>
+          <Text style={styles.subTitle}>
+            You have {tickets.length} Issues remaining
+          </Text>
 
-        <View style={styles.summaryContainer}>
-          <View style={styles.summaryItem}>
-            <MaterialIcons name="checklist" size={24} color={success} />
-            <Text> {done} Issues resolved</Text>
+          <View style={styles.summaryContainer}>
+            <View style={styles.summaryItem}>
+              <MaterialIcons name="checklist" size={24} color={success} />
+              <Text> {done} Issues resolved</Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <MaterialIcons name="pending-actions" size={24} color={danger} />
+              <Text> {remaining} Issues remaining</Text>
+            </View>
           </View>
-          <View style={styles.summaryItem}>
-            <MaterialIcons name="pending-actions" size={24} color={danger} />
-            <Text> {remaining} Issues remaining</Text>
-          </View>
+          <FlatList
+            data={tickets}
+            keyExtractor={(item) => (item.id + 1).toString()}
+            renderItem={({ item }) => (
+              <>
+                <Ticket
+                  onStateChange={(
+                    newState: "created" | "ongoing" | "completed"
+                  ) => {
+                    item.status = newState;
+                    setTickets([...tickets]);
+                  }}
+                  onRatingChange={(rating: string) => {
+                    item.rating = Number(rating);
+                    setTickets([...tickets]);
+                  }}
+                  onDelete={() => {
+                    setTickets(tickets.filter((t) => t.id !== item.id));
+                  }}
+                  ticket={item}
+                ></Ticket>
+              </>
+            )}
+            style={styles.ticketList}
+          ></FlatList>
         </View>
-        <FlatList
-          data={tickets}
-          keyExtractor={(item) => (item.id + 1).toString()}
-          renderItem={({ item }) => (
-            <>
-              <Ticket
-                onStateChange={(
-                  newState: "created" | "ongoing" | "completed"
-                ) => {
-                  item.status = newState;
-                  setTickets([...tickets]);
-                }}
-                onRatingChange={(rating: string) => {
-                  item.rating = Number(rating);
-                  setTickets([...tickets]);
-                }}
-                onDelete={() => {
-                  setTickets(tickets.filter((t) => t.id !== item.id));
-                }}
-                ticket={item}
-              ></Ticket>
-            </>
-          )}
-          style={styles.ticketList}
-        ></FlatList>
       </SafeAreaView>
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
           setModalVisible(true);
         }}
@@ -78,7 +86,7 @@ export default function Page() {
         <View style={styles.addButtonContainer}>
           <MaterialIcons name="add" size={48} color="white" />
         </View>
-      </Pressable>
+      </TouchableOpacity>
       <AddTicketModal
         visible={modalVisible}
         onAdd={(title: string, description: string) => {
@@ -103,8 +111,9 @@ export default function Page() {
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 40,
-    paddingInline: 18,
+    paddingTop: 20,
+    marginInline: 8,
+    paddingBottom: 0,
     width: "auto",
     height: "100%",
     backgroundColor: "#fff",

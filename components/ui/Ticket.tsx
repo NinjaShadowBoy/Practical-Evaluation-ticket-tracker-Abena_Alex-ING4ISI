@@ -2,7 +2,7 @@ import { danger, dark, success, warning } from "@/constants/Colors";
 import { TicketType } from "@/interfaces/ticket.interface";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export function Ticket({
   ticket,
@@ -17,6 +17,17 @@ export function Ticket({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [rating, setRating] = useState("");
+
+  function handleDeletePress() {
+    Alert.alert(
+      "Delete ticket",
+      `Are you sure you want to delete ticket #${ticket.id}: ${ticket.title}? This action cannot be undone.`,
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: () => onDelete() },
+      ]
+    );
+  }
 
   function ratingStars(rating: number) {
     const stars = [];
@@ -52,8 +63,8 @@ export function Ticket({
               #{ticket.id}
             </Text>
           </View>
-          <View
-            onTouchStart={() => setExpanded(!expanded)}
+          <TouchableOpacity
+            onPress={() => setExpanded(!expanded)}
             style={styles.ticketText}
           >
             <View style={styles.timeInfo}>
@@ -121,17 +132,17 @@ export function Ticket({
                 )}
               </>
             )}
-          </View>
-          <Pressable style={styles.cancelCircle} onPress={onDelete}>
-            <MaterialIcons name="trash" size={28} color={danger} />
-          </Pressable>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cancelCircle} onPress={handleDeletePress}>
+            <MaterialIcons name="delete" size={28} color={danger} />
+          </TouchableOpacity>
         </View>
         {expanded && (
           <View style={styles.ticketDetails}>
             <Text>{ticket.text}</Text>
             {ticket.status === "created" ? (
               <View style={styles.ticketActions}>
-                <Pressable
+                <TouchableOpacity
                   style={{ width: "50%" }}
                   onPress={() => onStateChange("ongoing")}
                 >
@@ -144,11 +155,11 @@ export function Ticket({
                   >
                     Mark Under Assistance
                   </Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             ) : (
               <View style={styles.ticketActions}>
-                <Pressable
+                <TouchableOpacity
                   style={{ width: "50%" }}
                   onPress={() => onStateChange("created")}
                 >
@@ -161,9 +172,9 @@ export function Ticket({
                   >
                     Revert
                   </Text>
-                </Pressable>
+                </TouchableOpacity>
                 {ticket.status !== "completed" && (
-                  <Pressable
+                  <TouchableOpacity
                     style={{ width: "50%" }}
                     onPress={() => onStateChange("completed")}
                   >
@@ -176,7 +187,7 @@ export function Ticket({
                     >
                       Mark Complete
                     </Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 )}
               </View>
             )}
